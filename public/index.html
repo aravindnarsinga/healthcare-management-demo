@@ -1,0 +1,218 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Demo healthcare management dashboard">
+  <title>CarePoint | Healthcare Management</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="/">
+      <span class="brand-icon">✚</span>
+      <span>CarePoint<small>Healthcare Management</small></span>
+    </a>
+
+    <p class="nav-heading">WORKSPACE</p>
+    <a class="nav-link active" href="#dashboard">▦ Dashboard</a>
+    <a class="nav-link" href="#patients">♙ Patients</a>
+    <a class="nav-link" href="#doctors">⚕ Doctors</a>
+    <a class="nav-link" href="#appointments">▣ Appointments</a>
+
+    <div class="sidebar-note">
+      <span class="status-dot"></span>
+      Demo environment
+      <p>Sample data only. Not for clinical use.</p>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">HEALTHCARE OVERVIEW</p>
+        <h1>Good morning, Administrator 👋</h1>
+        <p class="muted">Welcome to your healthcare management dashboard.</p>
+      </div>
+      <div class="avatar">AD</div>
+    </header>
+
+    <section id="dashboard">
+      <div class="section-heading">
+        <div>
+          <h2>Dashboard overview</h2>
+          <p class="muted">A quick look at your demo environment.</p>
+        </div>
+        <span class="badge">● System online</span>
+      </div>
+
+      <div class="stats">
+        <article class="stat-card">
+          <span class="stat-icon blue">♙</span>
+          <p>Total patients</p>
+          <h3 id="patient-count">0</h3>
+          <small>Demo registrations this session</small>
+        </article>
+        <article class="stat-card">
+          <span class="stat-icon green">⚕</span>
+          <p>Available doctors</p>
+          <h3>4</h3>
+          <small>Sample doctor directory</small>
+        </article>
+        <article class="stat-card">
+          <span class="stat-icon purple">▣</span>
+          <p>Appointments</p>
+          <h3 id="appointment-count">0</h3>
+          <small>Demo requests this session</small>
+        </article>
+      </div>
+    </section>
+
+    <section id="doctors" class="panel">
+      <div class="section-heading">
+        <div>
+          <h2>Our specialists</h2>
+          <p class="muted">Example healthcare professionals.</p>
+        </div>
+      </div>
+      <div class="doctor-grid">
+        <article class="doctor-card">
+          <div class="doctor-avatar avatar-blue">👩‍⚕️</div>
+          <h3>Dr. Sarah Johnson</h3>
+          <p>Cardiology</p>
+          <span class="doctor-status">Available for demo</span>
+        </article>
+        <article class="doctor-card">
+          <div class="doctor-avatar avatar-green">👨‍⚕️</div>
+          <h3>Dr. Michael Chen</h3>
+          <p>General Medicine</p>
+          <span class="doctor-status">Available for demo</span>
+        </article>
+        <article class="doctor-card">
+          <div class="doctor-avatar avatar-purple">👩‍⚕️</div>
+          <h3>Dr. Emily Davis</h3>
+          <p>Pediatrics</p>
+          <span class="doctor-status">Available for demo</span>
+        </article>
+        <article class="doctor-card">
+          <div class="doctor-avatar avatar-orange">👨‍⚕️</div>
+          <h3>Dr. James Wilson</h3>
+          <p>Orthopedics</p>
+          <span class="doctor-status">Available for demo</span>
+        </article>
+      </div>
+    </section>
+
+    <section class="forms-grid">
+      <article class="panel" id="patients">
+        <h2>Register a demo patient</h2>
+        <p class="muted">Use fictional details only.</p>
+        <form id="patient-form">
+          <label for="patient-name">Patient name</label>
+          <input id="patient-name" name="name" required maxlength="80"
+            placeholder="Example: Demo Patient">
+
+          <label for="patient-email">Email address</label>
+          <input id="patient-email" name="email" type="email" required
+            maxlength="120" placeholder="demo@example.com">
+
+          <button type="submit">Register patient</button>
+          <p class="form-message" id="patient-message" role="status"></p>
+        </form>
+      </article>
+
+      <article class="panel" id="appointments">
+        <h2>Request an appointment</h2>
+        <p class="muted">This creates a temporary demo request.</p>
+        <form id="appointment-form">
+          <label for="appointment-name">Patient display name</label>
+          <input id="appointment-name" name="name" required maxlength="80"
+            placeholder="Example: Demo Patient">
+
+          <label for="doctor">Choose a specialist</label>
+          <select id="doctor" name="doctor" required>
+            <option value="">Select a doctor</option>
+            <option>Dr. Sarah Johnson</option>
+            <option>Dr. Michael Chen</option>
+            <option>Dr. Emily Davis</option>
+            <option>Dr. James Wilson</option>
+          </select>
+
+          <label for="appointment-date">Preferred date</label>
+          <input id="appointment-date" name="date" type="date" required>
+
+          <button type="submit">Request appointment</button>
+          <p class="form-message" id="appointment-message" role="status"></p>
+        </form>
+      </article>
+    </section>
+
+    <footer>
+      CarePoint Healthcare Demo · Built with Node.js · Jenkins CI/CD
+      <br>
+      <span>Educational demonstration only — no real patient data.</span>
+    </footer>
+  </main>
+
+  <script>
+    async function submitDemoForm(formId, endpoint, messageId) {
+      const form = document.getElementById(formId);
+      const message = document.getElementById(messageId);
+
+      form.addEventListener('submit', async event => {
+        event.preventDefault();
+        message.textContent = 'Submitting demo request...';
+
+        const data = Object.fromEntries(new FormData(form).entries());
+
+        try {
+          const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+
+          const result = await response.json();
+
+          if (!response.ok) {
+            throw new Error(result.error || 'Request failed');
+          }
+
+          message.textContent = result.message;
+          form.reset();
+          await refreshDashboard();
+        } catch (error) {
+          message.textContent = error.message;
+        }
+      });
+    }
+
+    async function refreshDashboard() {
+      try {
+        const response = await fetch('/api/dashboard');
+        const data = await response.json();
+
+        document.getElementById('patient-count').textContent = data.patients;
+        document.getElementById('appointment-count').textContent =
+          data.appointments;
+      } catch {
+        // Keep the page usable if the dashboard request fails.
+      }
+    }
+
+    submitDemoForm(
+      'patient-form', '/api/patients', 'patient-message'
+    );
+
+    submitDemoForm(
+      'appointment-form', '/api/appointments', 'appointment-message'
+    );
+
+    document.getElementById('appointment-date').min =
+      new Date().toISOString().slice(0, 10);
+
+    refreshDashboard();
+  </script>
+</body>
+</html>
