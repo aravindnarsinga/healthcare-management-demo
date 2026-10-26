@@ -1,0 +1,12 @@
+
+{
+  "name": "healthcare-management-demo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Demo healthcare website deployed using Jenkins",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "node --check app.js"
+  }
+}
